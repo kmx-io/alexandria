@@ -188,6 +188,15 @@
       (and (member x '(1 2 3)) t))
   t)
 
+;; https://gitlab.common-lisp.net/alexandria/alexandria/issues/13
+(deftest whichever.3
+  (multiple-value-bind (code warnings?)
+      (compile nil `(lambda (x)
+                      (whichever (1+ x))))
+    (and (not warnings?)
+         (= 6 (funcall code 5))))
+  t)
+
 (deftest xor.1
     (xor nil nil 1 nil)
   1
