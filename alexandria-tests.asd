@@ -3,7 +3,8 @@
   :description "Tests for Alexandria, which is a collection of portable public domain utilities."
   :author "Nikodemus Siivola <nikodemus@sb-studio.net>, and others."
   :depends-on (:alexandria #+sbcl :sb-rt #-sbcl :rt)
-  :components ((:file "alexandria-1/tests"))
+  :components ((:file "alexandria-1/tests")
+               (:file "alexandria-2/tests"))
   :perform (test-op (o c)
              (flet ((run-tests (&rest args)
                       (apply (intern (string '#:run-tests) '#:alexandria-tests) args)))
