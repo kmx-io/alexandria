@@ -14,7 +14,7 @@ The second return value is an alist of the removed items, in unspecified order."
            (if (member key keys :test #'eq)
                ;; skip over this pair
                (let ((next (cdr rest)))
-                 (push (cons key rest)
+                 (push (cons key (car rest))
                        kept)
                  (if tail
                      (setf (cdr tail) next)

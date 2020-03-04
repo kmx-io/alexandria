@@ -59,5 +59,9 @@ the following constraints:
                          (:file "arrays" :depends-on ("package" "types"))
                          (:file "sequences" :depends-on ("package" "lists" "types"))
                          (:file "numbers" :depends-on ("package" "sequences"))
-                         (:file "features" :depends-on ("package" "control-flow")))))
+                         (:file "features" :depends-on ("package" "control-flow"))))
+   (:module "alexandria-2"
+            :components ((:static-file "tests.lisp")
+                         (:file "package")
+                         (:file "lists" :depends-on ("package")))))
   :in-order-to ((test-op (test-op "alexandria-tests"))))
