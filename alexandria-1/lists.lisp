@@ -193,6 +193,8 @@ designator of the expected type in a TYPE-ERROR."
              (assert (member 'list lambda-list))
              `(defun ,name ,lambda-list
                 ,doc
+                (unless (listp list)
+                  (error 'type-error :datum list :expected-type 'list))
                 (do ((last list fast)
                      (fast list (cddr fast))
                      (slow (cons (car list) (cdr list)) (cdr slow))
