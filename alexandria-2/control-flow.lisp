@@ -5,7 +5,7 @@
 
 The THREAD-FIRST-P decides where to thread the FORMS, accumulating in ACC."
   (if forms
-      (thread-iter thread-first-p
+      (line-up-iter thread-first-p
                    (let ((form (car forms)))
                      (if (listp form)
                          (if thread-first-p

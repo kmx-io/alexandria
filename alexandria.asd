@@ -63,5 +63,6 @@ the following constraints:
    (:module "alexandria-2"
             :components ((:static-file "tests.lisp")
                          (:file "package")
+                         (:file "control-flow" :depends-on ("package"))
                          (:file "lists" :depends-on ("package")))))
   :in-order-to ((test-op (test-op "alexandria-tests"))))
