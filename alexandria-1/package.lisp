@@ -1,5 +1,5 @@
-(defpackage :alexandria.1.0.0
-  (:nicknames :alexandria)
+(defpackage :alexandria
+  (:nicknames :alexandria.1.0.0 :alexandria-1)
   (:use :cl)
   #+sb-package-locks
   (:lock t)
