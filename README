@@ -48,6 +48,8 @@ Patches:
   done and /why/, and when fixing a bug or adding a feature you should
   also include a test-case.
 
+Versioning & Changes:
+
   Be advised that the ALEXANDRIA-1 package is frozen; there are so many 
   existing users that any newly exported symbols are likely to break
   someone's code.
@@ -56,3 +58,5 @@ Patches:
   ALEXANDRIA-1 as well [just change your (:USE ALEXANDRIA) to 
   (:USE ALEXANDRIA-2) to get the new functions in your package].
 
+  Alexandria will be running 1.x version numbers until ALEXANDRIA-2 is
+  frozen as well; then a 2.0.0 will be released.

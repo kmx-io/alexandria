@@ -1,5 +1,5 @@
 (defsystem "alexandria"
-  :version "1.0.0"
+  :version "1.0.1"
   :licence "Public Domain / 0-clause MIT"
   :description "Alexandria is a collection of portable public domain utilities."
   :author "Nikodemus Siivola and others."
