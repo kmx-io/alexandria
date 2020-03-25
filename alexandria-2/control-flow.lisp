@@ -18,29 +18,35 @@ The THREAD-FIRST-P decides where to thread the FORMS, accumulating in ACC."
 (defmacro line-up-first (&rest forms)
   "Lines up FORMS elements as the first argument of their successor.
 Example:
-    (thread-first
-      5
-      (+ 20)
-      (/ 25)
-      -
-      (+ 40))
-Is equivalent to:
-    (+ (- (/ (+ 5 20) 25)) 40)
-Note how the single `-' got converted into a list before
+
+ (thread-first
+   5
+   (+ 20)
+   /
+   (+ 40))
+
+is equivalent to:
+
+ (+ (/ (+ 5 20)) 40)
+
+Note how the single '/ got converted into a list before
 threading."
   (line-up-iter t (car forms) (cdr forms)))
 
 (defmacro line-up-last (&rest forms)
   "Lines up FORMS elements as the last argument of their successor.
 Example:
-    (thread-last
-      5
-      (+ 20)
-      (/ 25)
-      -
-      (+ 40))
-Is equivalent to:
-    (+ 40 (- (/ 25 (+ 20 5))))
-Note how the single `-' got converted into a list before
+
+ (thread-last
+   5
+   (+ 20)
+   /
+   (+ 40))
+
+is equivalent to:
+
+    (+ 40 (/ (+ 20 5)))
+
+Note how the single '/ got converted into a list before
 threading."
   (line-up-iter nil (car forms) (cdr forms)))
