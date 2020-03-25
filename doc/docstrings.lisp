@@ -202,6 +202,16 @@ symbols or lists of symbols."))
 
 ;;; Node names for DOCUMENTATION instances
 
+(defun short-name-for-symbol (symbol &optional (package *base-package*))
+  "Given a SYMBOL, return its name if it's available in PACKAGE,
+  or PACKAGE:SYMBOL otherwise."
+  (format nil "~@[~a:~]~a"
+          (unless (eq symbol
+                      (find-symbol (symbol-name symbol) 
+                                   package))
+            (shortest-package-name (symbol-package symbol)))
+          (symbol-name symbol)))
+
 (defgeneric name-using-kind/name (kind name doc))
 
 (defmethod name-using-kind/name (kind (name string) doc)
@@ -210,12 +220,13 @@ symbols or lists of symbols."))
 
 (defmethod name-using-kind/name (kind (name symbol) doc)
   (declare (ignore kind))
-  (format nil "~@[~A:~]~A" (short-package-name (get-package doc)) name))
+  (short-name-for-symbol name))
 
 (defmethod name-using-kind/name (kind (name list) doc)
   (declare (ignore kind))
   (assert (setf-name-p name))
-  (format nil "(setf ~@[~A:~]~A)" (short-package-name (get-package doc)) (second name)))
+  (let ((name (short-name-for-symbol (second name))))
+    (format nil "(setf ~A)" name)))
 
 (defmethod name-using-kind/name ((kind (eql 'method)) name doc)
   (format nil "~A~{ ~A~} ~A"
@@ -228,10 +239,14 @@ symbols or lists of symbols."))
   (let ((kind (get-kind doc)))
     (format nil "~:(~A~) ~(~A~)" kind (name-using-kind/name kind (get-name doc) doc))))
 
+(defun shortest-package-name (package)
+  (car (sort (copy-list (cons (package-name package) (package-nicknames package)))
+             #'< :key #'length)))
+
 (defun short-package-name (package)
   (unless (eq package *base-package*)
-    (car (sort (copy-list (cons (package-name package) (package-nicknames package)))
-               #'< :key #'length))))
+    (shortest-package-name package)))
+
 
 ;;; Definition titles for DOCUMENTATION instances
 
@@ -243,12 +258,12 @@ symbols or lists of symbols."))
 
 (defmethod title-using-kind/name (kind (name symbol) doc)
   (declare (ignore kind))
-  (format nil "~@[~A:~]~A" (short-package-name (get-package doc)) name))
+  (short-name-for-symbol name))
 
 (defmethod title-using-kind/name (kind (name list) doc)
   (declare (ignore kind))
   (assert (setf-name-p name))
-  (format nil "(setf ~@[~A:~]~A)" (short-package-name (get-package doc)) (second name)))
+  (format nil "(setf ~A)" (short-name-for-symbol (second name))))
 
 (defmethod title-using-kind/name ((kind (eql 'method)) name doc)
   (format nil "~{~A ~}~A"
@@ -807,14 +822,17 @@ values of doc-type."
   (nconc (collect-name-documentation symbol)
          (collect-name-documentation (list 'setf symbol))))
 
-(defun collect-documentation (package)
+(defun collect-documentation (package &optional ht)
   "Collects all documentation for all external symbols of the given
 package, as well as for the package itself."
   (let* ((*documentation-package* (find-package package))
          (docs nil))
     (check-type package package)
     (do-external-symbols (symbol package)
-      (setf docs (nconc (collect-symbol-documentation symbol) docs)))
+      (unless (and ht
+                   (nth-value 1 (alexandria:ensure-gethash symbol ht t)))
+        (setf (gethash symbol ht) t)
+        (setf docs (nconc (collect-symbol-documentation symbol) docs))))
     (let ((doc (maybe-documentation *documentation-package* t)))
       (when doc
         (push doc docs)))
@@ -849,11 +867,12 @@ via @include statements. Texinfo syntax-significant characters are
 escaped in symbol names, but if a docstring contains invalid Texinfo
 markup, you lose."
   (handler-bind ((warning #'muffle-warning))
-    (let ((directory (merge-pathnames (pathname directory)))
-          (*base-package* (find-package base-package)))
+    (let* ((directory (merge-pathnames (pathname directory)))
+           (*base-package* (find-package base-package))
+           (syms-seen (make-hash-table :test #'eq)))
       (ensure-directories-exist directory)
       (dolist (package packages)
-        (dolist (doc (collect-documentation (find-package package)))
+        (dolist (doc (collect-documentation (find-package package) syms-seen))
           (with-texinfo-file (merge-pathnames (include-pathname doc) directory)
             (write-texinfo doc))))
       (with-texinfo-file (merge-pathnames "ifnottex.texinfo" directory)

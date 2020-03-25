@@ -15,7 +15,7 @@ include:
 	sbcl --no-userinit --eval '(require :asdf)' \
 	--eval '(let ((asdf:*central-registry* (list "../"))) (require :alexandria))' \
 	--eval '(with-compilation-unit () (load "docstrings.lisp"))' \
-	--eval '(sb-texinfo:generate-includes "include/" (list :alexandria-2) :base-package :alexandria-2)' \
+	--eval '(sb-texinfo:generate-includes "include/" (list :alexandria-1 :alexandria-2) :base-package :alexandria)' \
 	--eval '(quit)'
 
 pdf: include
