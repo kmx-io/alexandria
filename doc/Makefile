@@ -26,3 +26,6 @@ html: include
 
 info: include
 	makeinfo alexandria.texinfo
+
+publish:
+	rsync -va alexandria.pdf alexandria.html common-lisp.net:/project/alexandria/public_html/draft/
