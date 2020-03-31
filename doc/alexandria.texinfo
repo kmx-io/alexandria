@@ -54,8 +54,15 @@ terms and conditions:
   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @end quotation
-@end copying
 
+Unless otherwise noted, the symbols are exported from 
+the @code{"ALEXANDRIA"} package; only newer symbols
+that require @code{"ALEXANDRIA-2"} are fully qualified.
+
+The package @code{"ALEXANDRIA-2"} includes all the symbols 
+from @code{"ALEXANDRIA-1"}.
+
+@end copying
 @titlepage
 
 @title alexandria Manual
@@ -65,13 +72,6 @@ terms and conditions:
 @page
 @vskip 0pt plus 1filll
 @insertcopying
-
-Unless otherwise noted, the symbols are exported from 
-the @code{"ALEXANDRIA"} package; only newer symbols
-that require @code{"ALEXANDRIA-2"} are fully qualified.
-
-The package @code{"ALEXANDRIA-2"} includes all the symbols 
-from @code{"ALEXANDRIA-1"}.
 
 @end titlepage
 
