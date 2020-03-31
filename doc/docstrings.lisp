@@ -848,14 +848,17 @@ package, as well as for the package itself."
 (defun write-ifnottex ()
   ;; We use @&key, etc to escape & from TeX in lambda lists -- so we need to
   ;; define them for info as well.
+  ;; Texinfo > 5 doesn't allow "&" in macro names any more;
+  ;; see also https://bugs.launchpad.net/asdf/+bug/1172567 or
+  ;; ASDF commit dfa4643b212b194f2d673b6f0d9c7d4b19d823ba
   (flet ((macro (name)
                  (let ((string (string-downcase name)))
-                   (format *texinfo-output* "@macro ~A~%~A~%@end macro~%" string string))))
-    (macro '&allow-other-keys)
-    (macro '&optional)
-    (macro '&rest)
-    (macro '&key)
-    (macro '&body)))
+                   (format *texinfo-output* "@macro ~A~%&~A~%@end macro~%" string string))))
+    (macro 'allow-other-keys)
+    (macro 'optional)
+    (macro 'rest)
+    (macro 'key)
+    (macro 'body)))
 
 (defun generate-includes (directory packages &key (base-package :cl-user))
   "Create files in `directory' containing Texinfo markup of all
