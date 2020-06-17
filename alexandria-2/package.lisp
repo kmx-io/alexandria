@@ -1,3 +1,4 @@
+(in-package :cl-user)
 (defpackage :alexandria-2
   (:nicknames :alexandria.2)
   (:use :cl :alexandria.1.0.0)
