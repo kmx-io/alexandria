@@ -61,6 +61,7 @@ the following constraints:
                          (:file "numbers" :depends-on ("package" "sequences"))
                          (:file "features" :depends-on ("package" "control-flow"))))
    (:module "alexandria-2"
+            :depends-on ("alexandria-1")
             :components ((:static-file "tests.lisp")
                          (:file "package")
                          (:file "control-flow" :depends-on ("package"))
